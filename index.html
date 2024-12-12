@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stairs Riddle Challenge</title>
+  <title>Isaac's Cool Website</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -16,14 +16,15 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      animation: backgroundChange 2s infinite;
       position: relative;
+      overflow: hidden;
     }
 
     h1 {
       font-size: 3em;
       color: yellow;
       animation: textFlash 1s infinite;
+      z-index: 1;
     }
 
     p {
@@ -31,6 +32,7 @@
       margin-top: 20px;
       color: white;
       animation: textFlash 1.5s infinite;
+      z-index: 1;
     }
 
     input, button {
@@ -54,18 +56,7 @@
       color: red;
       font-size: 1.2em;
       margin-top: 10px;
-    }
-
-    @keyframes backgroundChange {
-      0% { background-color: black; }
-      50% { background-color: white; }
-      100% { background-color: black; }
-    }
-
-    @keyframes textFlash {
-      0% { color: white; }
-      50% { color: yellow; }
-      100% { color: white; }
+      z-index: 1;
     }
 
     #dvdLogo {
@@ -101,31 +92,18 @@
         left: 10%;
       }
     }
-  </style>
-</head>
-<body>
-  <h1>Stairs Riddle Challenge</h1>
-  <p>Solve this riddle to continue:</p>
-  <p>What goes up but never comes down?</p>
-  <input type="text" id="riddleAnswer" placeholder="Your answer here">
-  <button onclick="checkAnswer()">Submit</button>
-  <p id="error"></p>
 
-  <div id="dvdLogo"></div>
-
-  <script>
-    function checkAnswer() {
-      const answer = document.getElementById('riddleAnswer').value.trim().toLowerCase();
-      const error = document.getElementById('error');
-      
-      // Correct answer is "stairs"
-      if (answer === "stairs") {
-        // Redirect to the next challenge page (lvno.html for math challenge)
-        window.location.href = "lvno.html";
-      } else {
-        error.textContent = "Wrong answer! Try again.";
-      }
+    @keyframes textFlash {
+      0% { color: white; }
+      50% { color: yellow; }
+      100% { color: white; }
     }
-  </script>
-</body>
-</html>
+
+    #youtubeLink {
+      position: absolute;
+      bottom: 20px;
+      color: white;
+      font-size: 1.2em;
+      text-decoration: none;
+      z-index: 2;
+      animation: textFlash 1s infinite
