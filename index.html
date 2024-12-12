@@ -7,28 +7,20 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
       margin: 0;
       padding: 0;
-      background-color: black; /* Background for contrast */
-      overflow: hidden; /* Prevent scrollbars */
-      height: 100vh; /* Full viewport height */
+      background-color: black;
+      overflow: hidden; /* No scrollbars */
+      height: 100vh;
     }
     .bouncing-image {
-      width: 100px;
       position: absolute;
-      animation: bounce-all 6s ease-in-out infinite;
-    }
-    @keyframes bounce-all {
-      0% { transform: translate(0, 0); }
-      20% { transform: translate(80vw, 10vh); }
-      40% { transform: translate(70vw, 80vh); }
-      60% { transform: translate(10vw, 70vh); }
-      80% { transform: translate(20vw, 20vh); }
-      100% { transform: translate(0, 0); }
+      width: 100px;
     }
     .flashing-text {
       font-size: 2em;
+      text-align: center;
+      color: white;
       animation: flash 1s infinite alternate;
     }
     @keyframes flash {
@@ -47,13 +39,53 @@
     }
     p {
       color: white;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <img src="Pic.png" alt="Bouncing Image" class="bouncing-image">
+  <img src="Pic.png" alt="Bouncing Image" class="bouncing-image" id="bouncingImage">
   <h1 class="flashing-text">Isaac's cool website</h1>
   <div class="embed-box">YouTube embed link</div>
   <p>I'm so good I can give 5m lessons for $10 a pop</p>
+
+  <script>
+    const img = document.getElementById('bouncingImage');
+
+    // Set initial position and speed
+    let posX = 100;
+    let posY = 100;
+    let speedX = 2;
+    let speedY = 2;
+
+    // Get screen dimensions
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // Animation loop
+    function moveImage() {
+      posX += speedX;
+      posY += speedY;
+
+      // Bounce off edges
+      if (posX + img.offsetWidth >= screenWidth || posX <= 0) {
+        speedX *= -1; // Reverse X direction
+      }
+      if (posY + img.offsetHeight >= screenHeight || posY <= 0) {
+        speedY *= -1; // Reverse Y direction
+      }
+
+      // Apply new position
+      img.style.left = `${posX}px`;
+      img.style.top = `${posY}px`;
+
+      // Loop the animation
+      requestAnimationFrame(moveImage);
+    }
+
+    // Start the animation
+    img.style.position = 'absolute';
+    moveImage();
+  </script>
 </body>
 </html>
