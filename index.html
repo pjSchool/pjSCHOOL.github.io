@@ -3,212 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Isaac's Super Hard Play</title>
+  <title>Stairs Riddle Challenge</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
       background-color: black;
-      overflow: hidden;
+      color: white;
+      text-align: center;
+      margin: 0;
       height: 100vh;
-      color: white;
-    }
-    .bouncing-image {
-      position: absolute;
-      width: 100px;
-    }
-    .flashing-text {
-      font-size: 2em;
-      text-align: center;
-      color: white;
-      animation: flash 1s infinite alternate;
-    }
-    @keyframes flash {
-      from { color: white; }
-      to { color: yellow; }
-    }
-    .embed-box {
-      width: 300px;
-      height: 200px;
-      background-color: red;
-      margin: 50px auto;
       display: flex;
-      align-items: center;
       justify-content: center;
-      color: white;
+      align-items: center;
+      flex-direction: column;
+      animation: backgroundChange 2s infinite;
+      position: relative;
     }
+
+    h1 {
+      font-size: 3em;
+      color: yellow;
+      animation: textFlash 1s infinite;
+    }
+
     p {
-      color: white;
-      text-align: center;
-    }
-    .riddle-section, .timed-challenge, .color-matching {
+      font-size: 1.5em;
       margin-top: 20px;
-      text-align: center;
+      color: white;
+      animation: textFlash 1.5s infinite;
     }
-    input[type="text"] {
+
+    input, button {
+      font-size: 18px;
       padding: 10px;
-      font-size: 16px;
-      margin: 10px;
+      margin-top: 20px;
+      width: 250px;
+      border: 2px solid yellow;
+      border-radius: 5px;
+      background-color: black;
+      color: white;
     }
+
     button {
-      padding: 10px 15px;
-      font-size: 16px;
       cursor: pointer;
       background-color: yellow;
       border: none;
-      border-radius: 5px;
     }
+
     #error {
       color: red;
+      font-size: 1.2em;
       margin-top: 10px;
     }
-    .color-box {
-      width: 100px;
+
+    @keyframes backgroundChange {
+      0% { background-color: black; }
+      50% { background-color: white; }
+      100% { background-color: black; }
+    }
+
+    @keyframes textFlash {
+      0% { color: white; }
+      50% { color: yellow; }
+      100% { color: white; }
+    }
+
+    #dvdLogo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200px;
       height: 100px;
-      display: inline-block;
-      margin: 10px;
-      cursor: pointer;
+      background: url('pic.png') no-repeat center center;
+      background-size: contain;
+      animation: dvdBounce 5s infinite linear;
+    }
+
+    @keyframes dvdBounce {
+      0% {
+        top: 10%;
+        left: 10%;
+      }
+      25% {
+        top: 10%;
+        left: 90%;
+      }
+      50% {
+        top: 90%;
+        left: 90%;
+      }
+      75% {
+        top: 90%;
+        left: 10%;
+      }
+      100% {
+        top: 10%;
+        left: 10%;
+      }
     }
   </style>
 </head>
 <body>
-  <img src="Pic.png" alt="Bouncing Image" class="bouncing-image" id="bouncingImage">
-  <h1 class="flashing-text">Isaac's Super Hard Play</h1>
-  <div class="embed-box">YouTube embed link</div>
-  <p>I'm so good I can give 5m lessons for $10 a pop</p>
+  <h1>Stairs Riddle Challenge</h1>
+  <p>Solve this riddle to continue:</p>
+  <p>What goes up but never comes down?</p>
+  <input type="text" id="riddleAnswer" placeholder="Your answer here">
+  <button onclick="checkAnswer()">Submit</button>
+  <p id="error"></p>
 
-  <!-- Riddle Section -->
-  <div class="riddle-section">
-    <p>What goes up and down but never moves?</p>
-    <input type="text" id="riddleAnswer" placeholder="Your answer here">
-    <button onclick="checkAnswer()">Submit</button>
-    <p id="error"></p>
-  </div>
-
-  <!-- Timed Challenge -->
-  <div class="timed-challenge">
-    <p>Click on the buttons in the correct order within 10 seconds!</p>
-    <div id="challengeButtons">
-      <button id="btn1" onclick="clickButton(1)">1</button>
-      <button id="btn2" onclick="clickButton(2)">2</button>
-      <button id="btn3" onclick="clickButton(3)">3</button>
-      <button id="btn4" onclick="clickButton(4)">4</button>
-    </div>
-    <p id="challengeMessage"></p>
-  </div>
-
-  <!-- Color Matching -->
-  <div class="color-matching">
-    <p>Click the red color box!</p>
-    <div id="colorBoxes">
-      <div class="color-box" style="background-color: blue;" onclick="colorBoxClicked('blue')"></div>
-      <div class="color-box" style="background-color: red;" onclick="colorBoxClicked('red')"></div>
-      <div class="color-box" style="background-color: green;" onclick="colorBoxClicked('green')"></div>
-    </div>
-    <p id="colorError"></p>
-  </div>
+  <div id="dvdLogo"></div>
 
   <script>
-    const img = document.getElementById('bouncingImage');
-
-    // Set initial position and speed for bouncing image
-    let posX = 100;
-    let posY = 100;
-    let speedX = 2;
-    let speedY = 2;
-
-    // Get screen dimensions
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-
-    // Animation loop for image
-    function moveImage() {
-      posX += speedX;
-      posY += speedY;
-
-      // Bounce off edges
-      if (posX + img.offsetWidth >= screenWidth || posX <= 0) {
-        speedX *= -1; // Reverse X direction
-      }
-      if (posY + img.offsetHeight >= screenHeight || posY <= 0) {
-        speedY *= -1; // Reverse Y direction
-      }
-
-      // Apply new position
-      img.style.left = `${posX}px`;
-      img.style.top = `${posY}px`;
-
-      // Loop the animation
-      requestAnimationFrame(moveImage);
-    }
-
-    // Start the animation
-    img.style.position = 'absolute';
-    moveImage();
-
-    // Check the answer to the riddle
     function checkAnswer() {
       const answer = document.getElementById('riddleAnswer').value.trim().toLowerCase();
       const error = document.getElementById('error');
-
+      
+      // Correct answer is "stairs"
       if (answer === "stairs") {
-        // Proceed to next challenge
-        document.querySelector('.riddle-section').style.display = 'none';
-        document.querySelector('.timed-challenge').style.display = 'block';
+        // Redirect to the next challenge page (lvno.html for math challenge)
+        window.location.href = "lvno.html";
       } else {
         error.textContent = "Wrong answer! Try again.";
-      }
-    }
-
-    // Timed challenge logic
-    let correctOrder = [1, 2, 3, 4];
-    let userOrder = [];
-    let timer;
-    let timeLeft = 10;
-
-    function startTimer() {
-      timer = setInterval(() => {
-        timeLeft--;
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          document.getElementById('challengeMessage').textContent = "Time's up! Try again.";
-          resetTimedChallenge();
-        }
-      }, 1000);
-    }
-
-    function clickButton(buttonNumber) {
-      if (userOrder.length === 0) {
-        startTimer();
-      }
-
-      userOrder.push(buttonNumber);
-      if (userOrder[userOrder.length - 1] !== correctOrder[userOrder.length - 1]) {
-        document.getElementById('challengeMessage').textContent = "Wrong sequence! Try again.";
-        resetTimedChallenge();
-      } else if (userOrder.length === correctOrder.length) {
-        document.getElementById('challengeMessage').textContent = "Correct! You passed this challenge.";
-        document.querySelector('.timed-challenge').style.display = 'none';
-        document.querySelector('.color-matching').style.display = 'block';
-      }
-    }
-
-    function resetTimedChallenge() {
-      userOrder = [];
-      timeLeft = 10;
-      document.getElementById('challengeMessage').textContent = "";
-    }
-
-    // Color matching logic
-    function colorBoxClicked(color) {
-      if (color === 'red') {
-        document.getElementById('colorError').textContent = "Correct! You passed this challenge.";
-        setTimeout(() => {
-          window.location.href = "lvno.html"; // Redirect to lvno.html for the math challenge
-        }, 2000);
-      } else {
-        document.getElementById('colorError').textContent = "Wrong box! Try again.";
       }
     }
   </script>
