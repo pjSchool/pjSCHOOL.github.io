@@ -12,6 +12,7 @@
       background-color: black;
       overflow: hidden; /* No scrollbars */
       height: 100vh;
+      color: white;
     }
     .bouncing-image {
       position: absolute;
@@ -41,6 +42,27 @@
       color: white;
       text-align: center;
     }
+    .riddle-section {
+      margin-top: 20px;
+      text-align: center;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: yellow;
+      border: none;
+      border-radius: 5px;
+    }
+    #error {
+      color: red;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -48,6 +70,14 @@
   <h1 class="flashing-text">Isaac's cool website</h1>
   <div class="embed-box">YouTube embed link</div>
   <p>I'm so good I can give 5m lessons for $10 a pop</p>
+
+  <!-- Riddle Section -->
+  <div class="riddle-section">
+    <p>What goes up and down but never moves?</p>
+    <input type="text" id="riddleAnswer" placeholder="Your answer here">
+    <button onclick="checkAnswer()">Submit</button>
+    <p id="error"></p>
+  </div>
 
   <script>
     const img = document.getElementById('bouncingImage');
@@ -86,6 +116,20 @@
     // Start the animation
     img.style.position = 'absolute';
     moveImage();
+
+    // Check the answer to the riddle
+    function checkAnswer() {
+      const answer = document.getElementById('riddleAnswer').value.trim().toLowerCase();
+      const error = document.getElementById('error');
+
+      if (answer === "stairs") {
+        // Redirect to lvno.html
+        window.location.href = "lvno.html";
+      } else {
+        // Show error message
+        error.textContent = "Wrong answer! Try again.";
+      }
+    }
   </script>
 </body>
 </html>
