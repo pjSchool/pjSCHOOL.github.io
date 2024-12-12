@@ -12,23 +12,24 @@
       padding: 0;
       background-color: black; /* Background for contrast */
       overflow: hidden; /* Prevent scrollbars */
-      height: 100vh;
+      height: 100vh; /* Full viewport height */
     }
     .bouncing-image {
       width: 100px;
       position: absolute;
-      animation: bounce-all 5s linear infinite;
+      animation: bounce-all 6s ease-in-out infinite;
     }
     @keyframes bounce-all {
       0% { transform: translate(0, 0); }
-      25% { transform: translate(90vw, 0); }
-      50% { transform: translate(90vw, 90vh); }
-      75% { transform: translate(0, 90vh); }
+      20% { transform: translate(80vw, 10vh); }
+      40% { transform: translate(70vw, 80vh); }
+      60% { transform: translate(10vw, 70vh); }
+      80% { transform: translate(20vw, 20vh); }
       100% { transform: translate(0, 0); }
     }
     .flashing-text {
       font-size: 2em;
-      animation: flash 0.1s infinite alternate;
+      animation: flash 1s infinite alternate;
     }
     @keyframes flash {
       from { color: white; }
@@ -50,7 +51,7 @@
   </style>
 </head>
 <body>
-  <img src="Pic.png" alt="Bouncing" class="bouncing-image">
+  <img src="Pic.png" alt="Bouncing Image" class="bouncing-image">
   <h1 class="flashing-text">Isaac's cool website</h1>
   <div class="embed-box">YouTube embed link</div>
   <p>I'm so good I can give 5m lessons for $10 a pop</p>
