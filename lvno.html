@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Challenge</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: black; color: white; text-align: center; }
+    input { font-size: 18px; padding: 10px; width: 200px; }
+    button { font-size: 16px; padding: 10px 20px; cursor: pointer; background-color: yellow; border: none; border-radius: 5px; }
+    h1 { font-size: 2em; }
+    p { font-size: 1.2em; margin-top: 20px; }
+    #error { color: red; font-size: 1.1em; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Hard Math Challenge</h1>
+  <p>Solve this to continue:</p>
+  <p>What is the result of (528 * 41) - (72 * 6) + (sqrt(256) * 15) / 5 + 1378?</p>
+  <input type="text" id="mathAnswer" placeholder="Enter your answer here">
+  <button onclick="checkMathAnswer()">Submit</button>
+  <p id="error"></p>
+
+  <script>
+    function checkMathAnswer() {
+      const answer = document.getElementById('mathAnswer').value.trim();
+      const error = document.getElementById('error');
+      
+      // Hard math problem: (528 * 41) - (72 * 6) + (sqrt(256) * 15) / 5 + 1378
+      const correctAnswer = (528 * 41) - (72 * 6) + (Math.sqrt(256) * 15) / 5 + 1378;
+      
+      if (parseFloat(answer) === correctAnswer) {
+        error.textContent = "Correct! You're amazing.";
+        setTimeout(() => {
+          window.location.href = "timed_challenge.html"; // Redirect to next challenge
+        }, 2000);
+      } else {
+        error.textContent = "Incorrect answer. Try again!";
+      }
+    }
+  </script>
+</body>
+</html>
