@@ -33,20 +33,18 @@
       filter: drop-shadow(0px 0px 15px #ff9);
     }
 
-    /* YouTube Embed Placeholder */
+    /* YouTube Embed Box */
     .embed-box {
-      width: 350px;
-      height: 200px;
-      background: linear-gradient(135deg, #ff5757, #ff3131);
-      border-radius: 15px;
+      width: 560px;
+      height: 315px;
       margin: 50px auto;
       display: flex;
-      align-items: center;
       justify-content: center;
-      color: white;
-      font-size: 1.5em;
-      text-align: center;
-      text-shadow: 0 0 10px white, 0 0 20px white;
+      align-items: center;
+      background-color: black;
+      border: 2px solid white;
+      border-radius: 10px;
+      overflow: hidden;
       box-shadow: 0px 5px 20px rgba(255, 0, 0, 0.5);
     }
 
@@ -118,8 +116,17 @@
   <!-- Bouncing Image -->
   <img src="Pic.png" alt="Bouncing Image" class="bouncing-image" id="bouncingImage">
 
-  <!-- YouTube Embed Placeholder -->
-  <div class="embed-box">YouTube Embed Link</div>
+  <!-- YouTube Embed -->
+  <div class="embed-box">
+    <iframe 
+      width="560" 
+      height="315" 
+      src="https://www.youtube.com/embed/6Y4b25CYkkg?autoplay=1&loop=1&playlist=6Y4b25CYkkg&controls=0" 
+      frameborder="0" 
+      allow="autoplay" 
+      allowfullscreen>
+    </iframe>
+  </div>
   <p class="embed-description">I'm so good I can give 5 min lessons for $10 a pop</p>
 
   <!-- Riddle Section -->
