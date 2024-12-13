@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bouncing Images</title>
+    <title>Bouncing Images with "ilovetacobell" Trigger</title>
     <style>
         * {
             margin: 0;
@@ -41,6 +41,8 @@
     <script>
         const errorText = document.getElementById('errorText');
         const images = []; // Array to keep track of all bouncing images
+        let triggerPhrase = 'ilovetacobell'; // The trigger phrase
+        let typedText = ''; // Keeps track of what the user has typed
 
         // Function to create and add a new bouncing image
         function createBouncingImage(x, y) {
@@ -87,23 +89,6 @@
                     imageData.speedY = -imageData.speedY; // Reverse vertical direction
                 }
 
-                // Check for collision with other images
-                images.forEach(otherImageData => {
-                    if (imageData !== otherImageData) {
-                        const dx = imageData.posX - otherImageData.posX;
-                        const dy = imageData.posY - otherImageData.posY;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        // If images collide, reverse their speeds
-                        if (distance < (imageData.width / 2 + otherImageData.width / 2)) {
-                            imageData.speedX = -imageData.speedX;
-                            imageData.speedY = -imageData.speedY;
-                            otherImageData.speedX = -otherImageData.speedX;
-                            otherImageData.speedY = -otherImageData.speedY;
-                        }
-                    }
-                });
-
                 // Set the new position for the image element
                 imageData.element.style.left = `${imageData.posX}px`;
                 imageData.element.style.top = `${imageData.posY}px`;
@@ -124,6 +109,48 @@
 
         // Create the first image at the center of the screen
         createBouncingImage(window.innerWidth / 2, window.innerHeight / 2);
+
+        // Listen for user input to detect the trigger phrase "ilovetacobell"
+        document.body.addEventListener('keydown', (e) => {
+            // Append the typed key to the string
+            typedText += e.key;
+
+            // Check if the typed text matches the trigger phrase
+            if (typedText.includes(triggerPhrase)) {
+                // Move all images to the nearest corner
+                moveImagesToNearestCorner();
+                // Reset the typed text after triggering the action
+                typedText = '';
+            }
+        });
+
+        // Function to calculate the nearest corner and move images
+        function moveImagesToNearestCorner() {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            // Find the nearest corner
+            let targetX = 0;
+            let targetY = 0;
+
+            // Determine the closest corner
+            if (Math.abs(windowWidth - images[0].posX) < Math.abs(0 - images[0].posX)) {
+                targetX = windowWidth - 100; // Right corner
+            }
+            if (Math.abs(windowHeight - images[0].posY) < Math.abs(0 - images[0].posY)) {
+                targetY = windowHeight - 100; // Bottom corner
+            }
+
+            // Move all images to the nearest corner
+            images.forEach(imageData => {
+                const dx = targetX - imageData.posX;
+                const dy = targetY - imageData.posY;
+
+                // Move towards the corner
+                imageData.speedX = Math.sign(dx) * Math.min(4, Math.abs(dx) / 10);  // Adjust speed
+                imageData.speedY = Math.sign(dy) * Math.min(4, Math.abs(dy) / 10);  // Adjust speed
+            });
+        }
     </script>
 </body>
 </html>
