@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I have not made this page yet...</title>
+    <title>Bouncing Images with Canvas 404 Effect</title>
     <style>
         * {
             margin: 0;
@@ -43,12 +43,13 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        // Function to draw the 404 text with a pop-out effect
-        function draw404() {
+        // Function to draw the new text with a pop-out effect
+        function drawText() {
             ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before redrawing
 
-            // Set up the text properties
-            ctx.font = '200px Arial';
+            // Adjust font size dynamically based on screen width
+            const fontSize = Math.min(canvas.width, canvas.height) / 8;
+            ctx.font = `${fontSize}px Arial`;
             ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; // Light grey background
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -59,18 +60,18 @@
             ctx.shadowBlur = 20;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
 
-            // Draw the 404 text in the center of the canvas
+            // Draw the new text in the center of the canvas
             ctx.fillText('I have not made this (yet)', canvas.width / 2, canvas.height / 2);
         }
 
         // Call the draw function
-        draw404();
+        drawText();
 
         // Resize canvas if the window is resized
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            draw404(); // Redraw after resizing
+            drawText(); // Redraw after resizing
         });
 
         const images = []; // Array to keep track of all bouncing images
