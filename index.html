@@ -6,89 +6,132 @@
   <title>Isaac's Cool Website</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 0;
       background-color: black;
-      color: white;
-      overflow: hidden;
-      position: relative;
+      overflow: hidden; /* No scrollbars */
+      height: 100vh;
     }
 
-    #dvdLogo {
+    /* Bouncing Image */
+    .bouncing-image {
       position: absolute;
-      width: 200px;
-      height: 100px;
-      background: url('pic.png') no-repeat center center;
-      background-size: contain;
-      animation: dvdBounce 5s infinite linear;
+      width: 100px;
     }
 
-    h1 {
-      font-size: 3em;
-      color: yellow;
-      animation: textFlash 1s infinite;
-      z-index: 1;
-    }
-
-    p {
-      font-size: 1.5em;
-      color: white;
-      animation: textFlash 1.5s infinite;
-      z-index: 1;
-      position: absolute;
-      bottom: 100px;
-      width: 100%;
+    /* Flashing Text */
+    .flashing-text {
+      font-size: 2em;
       text-align: center;
+      color: white;
+      animation: flash 1s infinite alternate;
+      margin-top: 20px;
     }
 
-    #youtubeLink {
-      position: absolute;
-      bottom: 20px;
+    /* YouTube Embed Placeholder */
+    .embed-box {
+      width: 300px;
+      height: 200px;
+      background-color: red;
+      margin: 50px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: white;
       font-size: 1.2em;
-      text-decoration: none;
-      z-index: 2;
-      animation: textFlash 1s infinite;
     }
 
-    @keyframes dvdBounce {
-      0% {
-        top: 10%;
-        left: 10%;
-      }
-      25% {
-        top: 10%;
-        left: 90%;
-      }
-      50% {
-        top: 90%;
-        left: 90%;
-      }
-      75% {
-        top: 90%;
-        left: 10%;
-      }
-      100% {
-        top: 10%;
-        left: 10%;
-      }
+    /* Riddle Section */
+    .riddle {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-size: 1.2em;
     }
 
-    @keyframes textFlash {
-      0% { color: white; }
-      50% { color: yellow; }
-      100% { color: white; }
+    /* Flashing Animation */
+    @keyframes flash {
+      from { color: white; }
+      to { color: yellow; }
     }
   </style>
 </head>
 <body>
-  <h1>Isaac's Cool Website</h1>
-  <div id="dvdLogo"></div>
-  <p>What goes up but never comes down?</p>
-  <a id="youtubeLink" href="https://www.youtube.com" target="_blank">Visit my YouTube channel</a>
+  <!-- Bouncing Image -->
+  <img src="Pic.png" alt="Bouncing Image" class="bouncing-image" id="bouncingImage">
 
+  <!-- Flashing Text -->
+  <h1 class="flashing-text">Isaac's Cool Website</h1>
+
+  <!-- YouTube Embed Placeholder -->
+  <div class="embed-box">YouTube Embed Link</div>
+
+  <!-- Riddle Section -->
+  <div class="riddle">
+    <p>What goes up and down but never moves?</p>
+    <input type="text" id="riddleAnswer" placeholder="Your answer here">
+    <button onclick="checkAnswer()">Submit</button>
+    <p id="feedback" style="color: red; margin-top: 10px;"></p>
+  </div>
+
+  <script>
+    // Bouncing DVD Logo
+    const img = document.getElementById('bouncingImage');
+
+    // Set initial position and speed
+    let posX = 100;
+    let posY = 100;
+    let speedX = 2;
+    let speedY = 2;
+
+    // Get screen dimensions
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // Animation loop
+    function moveImage() {
+      posX += speedX;
+      posY += speedY;
+
+      // Bounce off edges
+      if (posX + img.offsetWidth >= screenWidth || posX <= 0) {
+        speedX *= -1; // Reverse X direction
+      }
+      if (posY + img.offsetHeight >= screenHeight || posY <= 0) {
+        speedY *= -1; // Reverse Y direction
+      }
+
+      // Apply new position
+      img.style.left = `${posX}px`;
+      img.style.top = `${posY}px`;
+
+      // Loop the animation
+      requestAnimationFrame(moveImage);
+    }
+
+    // Start the animation
+    img.style.position = 'absolute';
+    moveImage();
+
+    // Riddle Logic
+    function checkAnswer() {
+      const answer = document.getElementById('riddleAnswer').value.trim().toLowerCase();
+      const feedback = document.getElementById('feedback');
+
+      if (answer === 'stairs') {
+        feedback.style.color = 'green';
+        feedback.textContent = 'Correct! Welcome to the next level!';
+        setTimeout(() => {
+          window.location.href = 'lvno.html'; // Redirect to the math level
+        }, 1000);
+      } else {
+        feedback.style.color = 'red';
+        feedback.textContent = 'Incorrect! Try again.';
+      }
+    }
+  </script>
 </body>
 </html>
