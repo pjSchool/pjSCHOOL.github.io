@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bouncing Images with "ilovetacobell" Trigger</title>
+    <title>Bouncing Images with Canvas 404 Effect</title>
     <style>
         * {
             margin: 0;
@@ -23,26 +23,57 @@
             height: 100px;
             cursor: pointer;
         }
-        #errorText {
+        canvas {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 200px;
-            color: rgba(0, 0, 0, 0.1);
             z-index: 1;
-            user-select: none;
         }
     </style>
 </head>
 <body>
-    <div id="errorText">404</div>
+    <canvas id="canvas"></canvas>
 
     <script>
-        const errorText = document.getElementById('errorText');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Resize the canvas to fill the window
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Function to draw the 404 text with a pop-out effect
+        function draw404() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before redrawing
+
+            // Set up the text properties
+            ctx.font = '200px Arial';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; // Light grey background
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Add shadow effect for pop-out
+            ctx.shadowOffsetX = 10;
+            ctx.shadowOffsetY = 10;
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+
+            // Draw the 404 text in the center of the canvas
+            ctx.fillText('404', canvas.width / 2, canvas.height / 2);
+        }
+
+        // Call the draw function
+        draw404();
+
+        // Resize canvas if the window is resized
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            draw404(); // Redraw after resizing
+        });
+
         const images = []; // Array to keep track of all bouncing images
-        let triggerPhrase = 'ilovetacobell'; // The trigger phrase
-        let typedText = ''; // Keeps track of what the user has typed
 
         // Function to create and add a new bouncing image
         function createBouncingImage(x, y) {
@@ -63,7 +94,8 @@
                 speedX: (Math.random() * 4) + 2, // Random speed
                 speedY: (Math.random() * 4) + 2, // Random speed
                 width: img.width,
-                height: img.height
+                height: img.height,
+                isHeadingToCorner: false // Flag to track if it’s heading to the corner
             };
 
             images.push(imageData); // Add the image to the array
@@ -112,34 +144,20 @@
         // Create the first image at the center of the screen
         createBouncingImage(window.innerWidth / 2, window.innerHeight / 2);
 
-        // Listen for user input to detect the trigger phrase "ilovetacobell"
-        document.body.addEventListener('keydown', (e) => {
-            // Append the typed key to the string
-            typedText += e.key;
-
-            // Check if the typed text matches the trigger phrase
-            if (typedText.includes(triggerPhrase)) {
-                // Move all images to the nearest corner
-                moveImagesToNearestCorner();
-                // Reset the typed text after triggering the action
-                typedText = '';
-            }
-        });
-
-        // Function to calculate the nearest corner and move images
-        function moveImagesToNearestCorner() {
+        // Move all images to the nearest corner when the user clicks
+        document.body.addEventListener('click', (e) => {
+            // Find the nearest corner (bottom-right or top-left)
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
 
-            // Find the nearest corner
             let targetX = 0;
             let targetY = 0;
 
             // Determine the closest corner
-            if (Math.abs(windowWidth - images[0].posX) < Math.abs(0 - images[0].posX)) {
+            if (Math.abs(windowWidth - e.clientX) < Math.abs(0 - e.clientX)) {
                 targetX = windowWidth - 100; // Right corner
             }
-            if (Math.abs(windowHeight - images[0].posY) < Math.abs(0 - images[0].posY)) {
+            if (Math.abs(windowHeight - e.clientY) < Math.abs(0 - e.clientY)) {
                 targetY = windowHeight - 100; // Bottom corner
             }
 
@@ -153,7 +171,7 @@
                 imageData.speedX = Math.sign(dx) * Math.min(4, Math.abs(dx) / 10);  // Adjust speed
                 imageData.speedY = Math.sign(dy) * Math.min(4, Math.abs(dy) / 10);  // Adjust speed
             });
-        }
+        });
     </script>
 </body>
 </html>
