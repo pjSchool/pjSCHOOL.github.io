@@ -77,21 +77,23 @@
 
             // Loop through each image to update its position
             images.forEach(imageData => {
-                // Update position
-                imageData.posX += imageData.speedX;
-                imageData.posY += imageData.speedY;
+                if (!imageData.isHeadingToCorner) {
+                    // Update position for normal bouncing
+                    imageData.posX += imageData.speedX;
+                    imageData.posY += imageData.speedY;
 
-                // Bounce off the walls
-                if (imageData.posX + imageData.width > windowWidth || imageData.posX < 0) {
-                    imageData.speedX = -imageData.speedX; // Reverse horizontal direction
-                }
-                if (imageData.posY + imageData.height > windowHeight || imageData.posY < 0) {
-                    imageData.speedY = -imageData.speedY; // Reverse vertical direction
-                }
+                    // Bounce off the walls
+                    if (imageData.posX + imageData.width > windowWidth || imageData.posX < 0) {
+                        imageData.speedX = -imageData.speedX; // Reverse horizontal direction
+                    }
+                    if (imageData.posY + imageData.height > windowHeight || imageData.posY < 0) {
+                        imageData.speedY = -imageData.speedY; // Reverse vertical direction
+                    }
 
-                // Set the new position for the image element
-                imageData.element.style.left = `${imageData.posX}px`;
-                imageData.element.style.top = `${imageData.posY}px`;
+                    // Set the new position for the image element
+                    imageData.element.style.left = `${imageData.posX}px`;
+                    imageData.element.style.top = `${imageData.posY}px`;
+                }
             });
 
             // Request the next frame
@@ -143,6 +145,7 @@
 
             // Move all images to the nearest corner
             images.forEach(imageData => {
+                imageData.isHeadingToCorner = true; // Mark the image as heading to the corner
                 const dx = targetX - imageData.posX;
                 const dy = targetY - imageData.posY;
 
