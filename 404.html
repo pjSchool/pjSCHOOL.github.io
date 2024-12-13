@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            height: 100vh;
+            background-color: #f0f0f0;
+            overflow: hidden;
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+        #bouncingImg {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+        }
+        #errorText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 200px;
+            color: rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="errorText">404</div>
+    <img id="bouncingImg" src="Pic.png" alt="Bouncing Image">
+
+    <script>
+        const img = document.getElementById('bouncingImg');
+        const errorText = document.getElementById('errorText');
+        let posX = 0;
+        let posY = 0;
+        let speedX = 2;
+        let speedY = 2;
+        let imgWidth = img.width;
+        let imgHeight = img.height;
+
+        function updatePosition() {
+            // Get window dimensions
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            // Update image position
+            posX += speedX;
+            posY += speedY;
+
+            // Bounce image off the walls
+            if (posX + imgWidth > windowWidth || posX < 0) {
+                speedX = -speedX; // reverse horizontal direction
+            }
+            if (posY + imgHeight > windowHeight || posY < 0) {
+                speedY = -speedY; // reverse vertical direction
+            }
+
+            // Set the new position of the image
+            img.style.left = posX + 'px';
+            img.style.top = posY + 'px';
+
+            // Request the next frame
+            requestAnimationFrame(updatePosition);
+        }
+
+        // Start bouncing once the image is loaded
+        img.onload = function () {
+            updatePosition();
+        }
+
+        // Update image size if the window is resized
+        window.onresize = function () {
+            imgWidth = img.width;
+            imgHeight = img.height;
+        };
+    </script>
+</body>
+</html>
