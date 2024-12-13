@@ -12,7 +12,7 @@
       padding: 0;
       background: radial-gradient(circle, #1a1a1a, #000);
       color: white;
-      overflow: hidden; /* Prevent scrolling */
+      overflow: hidden;
       height: 100vh;
     }
 
@@ -21,7 +21,7 @@
       font-size: 4em;
       text-align: center;
       color: #fff;
-      animation: flash 1s infinite alternate;
+      animation: intenseFlash 0.1s infinite alternate;
       margin-top: 20px;
       text-shadow: 0 0 15px #ff0, 0 0 30px #ff6, 0 0 45px #ff3;
     }
@@ -104,8 +104,8 @@
       font-size: 1em;
     }
 
-    /* Flashing Animation */
-    @keyframes flash {
+    /* Intense Flash Animation */
+    @keyframes intenseFlash {
       from { color: white; }
       to { color: yellow; }
     }
@@ -131,10 +131,10 @@
   </div>
 
   <script>
-    // Bouncing DVD Logo
+    // Bouncing Image
     const img = document.getElementById('bouncingImage');
 
-    // Initial position and speed
+    // Set initial position and speed
     let posX = 100;
     let posY = 100;
     let speedX = 3;
@@ -157,7 +157,6 @@
         speedY *= -1;
       }
 
-      // Update position
       img.style.left = `${posX}px`;
       img.style.top = `${posY}px`;
 
