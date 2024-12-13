@@ -1,195 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Isaac's Cool Website</title>
-  <style>
-    /* General Styles */
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: radial-gradient(circle, #1a1a1a, #000);
-      color: white;
-      overflow: hidden;
-      height: 100vh;
-    }
-
-    /* Flashing Title */
-    .flashing-text {
-      font-size: 4em;
-      text-align: center;
-      color: #fff;
-      animation: intenseFlash 0.1s infinite alternate;
-      margin-top: 20px;
-      text-shadow: 0 0 15px #ff0, 0 0 30px #ff6, 0 0 45px #ff3;
-    }
-
-    /* Bouncing Image */
-    .bouncing-image {
-      position: absolute;
-      width: 120px;
-      filter: drop-shadow(0px 0px 15px #ff9);
-    }
-
-    /* YouTube Embed Box */
-    .embed-box {
-      width: 560px;
-      height: 315px;
-      margin: 50px auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: black;
-      border: 2px solid white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0px 5px 20px rgba(255, 0, 0, 0.5);
-    }
-
-    /* Embed Description */
-    .embed-description {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 1.2em;
-      color: #ff9;
-      text-shadow: 0 0 10px #ff9;
-    }
-
-    /* Riddle Section */
-    .riddle {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-      text-align: center;
-      font-size: 1.5em;
-    }
-
-    .riddle p {
-      margin-bottom: 15px;
-    }
-
-    .riddle input {
-      padding: 12px 15px;
-      font-size: 1em;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      margin-right: 10px;
-      box-shadow: 0 2px 10px rgba(255, 255, 255, 0.2);
-    }
-
-    .riddle button {
-      padding: 12px 20px;
-      font-size: 1em;
-      border-radius: 8px;
-      border: none;
-      background: linear-gradient(135deg, #ff3131, #ff5757);
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(255, 0, 0, 0.6);
-      transition: all 0.3s ease-in-out;
-    }
-
-    .riddle button:hover {
-      background: linear-gradient(135deg, #ff5757, #ff3131);
-      transform: scale(1.05);
-    }
-
-    #feedback {
-      margin-top: 15px;
-      font-size: 1em;
-    }
-
-    /* Intense Flash Animation */
-    @keyframes intenseFlash {
-      from { color: white; }
-      to { color: yellow; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bouncing Images</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            height: 100vh;
+            background-color: #f0f0f0;
+            overflow: hidden;
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+        .bouncingImg {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+        }
+        #errorText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 200px;
+            color: rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            user-select: none;
+        }
+    </style>
 </head>
 <body>
-  <!-- Flashing Title -->
-  <h1 class="flashing-text">Isaac's Cool Website</h1>
+    <div id="errorText">404</div>
 
-  <!-- Bouncing Image -->
-  <img src="Pic.png" alt="Bouncing Image" class="bouncing-image" id="bouncingImage">
+    <script>
+        const errorText = document.getElementById('errorText');
+        const images = []; // Array to keep track of all bouncing images
 
-  <!-- YouTube Embed -->
-  <div class="embed-box">
-    <iframe 
-      width="560" 
-      height="315" 
-      src="https://www.youtube.com/embed/6Y4b25CYkkg?autoplay=1&loop=1&playlist=6Y4b25CYkkg&controls=0" 
-      frameborder="0" 
-      allow="autoplay" 
-      allowfullscreen>
-    </iframe>
-  </div>
-  <p class="embed-description">I'm so good I can give 5 min lessons for $10 a pop</p>
+        // Function to create and add a new bouncing image
+        function createBouncingImage(x, y) {
+            const img = document.createElement('img');
+            img.src = "Pic.png";  // Image source
+            img.classList.add('bouncingImg');
+            img.style.left = `${x}px`;
+            img.style.top = `${y}px`;
 
-  <!-- Riddle Section -->
-  <div class="riddle">
-    <p>What goes up and down but never moves?</p>
-    <input type="text" id="riddleAnswer" placeholder="Your answer here">
-    <button onclick="checkAnswer()">Submit</button>
-    <p id="feedback" style="color: red; margin-top: 10px;"></p>
-  </div>
+            // Append the image to the body
+            document.body.appendChild(img);
 
-  <script>
-    // Bouncing Image
-    const img = document.getElementById('bouncingImage');
+            // Initialize the image's position and speed
+            const imageData = {
+                element: img,
+                posX: x,
+                posY: y,
+                speedX: (Math.random() * 4) + 2, // Random speed
+                speedY: (Math.random() * 4) + 2, // Random speed
+                width: img.width,
+                height: img.height
+            };
 
-    // Set initial position and speed
-    let posX = 100;
-    let posY = 100;
-    let speedX = 3;
-    let speedY = 3;
+            images.push(imageData); // Add the image to the array
+        }
 
-    // Get screen dimensions
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
+        // Function to handle the movement and collision detection
+        function updatePosition() {
+            // Get window dimensions
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
 
-    // Animation loop
-    function moveImage() {
-      posX += speedX;
-      posY += speedY;
+            // Loop through each image to update its position
+            images.forEach(imageData => {
+                // Update position
+                imageData.posX += imageData.speedX;
+                imageData.posY += imageData.speedY;
 
-      // Bounce off edges
-      if (posX + img.offsetWidth >= screenWidth || posX <= 0) {
-        speedX *= -1;
-      }
-      if (posY + img.offsetHeight >= screenHeight || posY <= 0) {
-        speedY *= -1;
-      }
+                // Bounce off the walls
+                if (imageData.posX + imageData.width > windowWidth || imageData.posX < 0) {
+                    imageData.speedX = -imageData.speedX; // Reverse horizontal direction
+                }
+                if (imageData.posY + imageData.height > windowHeight || imageData.posY < 0) {
+                    imageData.speedY = -imageData.speedY; // Reverse vertical direction
+                }
 
-      img.style.left = `${posX}px`;
-      img.style.top = `${posY}px`;
+                // Check for collision with other images
+                images.forEach(otherImageData => {
+                    if (imageData !== otherImageData) {
+                        const dx = imageData.posX - otherImageData.posX;
+                        const dy = imageData.posY - otherImageData.posY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
 
-      requestAnimationFrame(moveImage);
-    }
+                        // If images collide, reverse their speeds
+                        if (distance < (imageData.width / 2 + otherImageData.width / 2)) {
+                            imageData.speedX = -imageData.speedX;
+                            imageData.speedY = -imageData.speedY;
+                            otherImageData.speedX = -otherImageData.speedX;
+                            otherImageData.speedY = -otherImageData.speedY;
+                        }
+                    }
+                });
 
-    // Start animation
-    img.style.position = 'absolute';
-    moveImage();
+                // Set the new position for the image element
+                imageData.element.style.left = `${imageData.posX}px`;
+                imageData.element.style.top = `${imageData.posY}px`;
+            });
 
-    // Riddle Logic
-    function checkAnswer() {
-      const answer = document.getElementById('riddleAnswer').value.trim().toLowerCase();
-      const feedback = document.getElementById('feedback');
+            // Request the next frame
+            requestAnimationFrame(updatePosition);
+        }
 
-      if (answer === 'stairs') {
-        feedback.style.color = 'lime';
-        feedback.textContent = 'Correct! Welcome to the next level!';
-        setTimeout(() => {
-          window.location.href = 'lvno.html'; // Redirect to the math level
-        }, 1000);
-      } else {
-        feedback.style.color = 'red';
-        feedback.textContent = 'Incorrect! Try again.';
-      }
-    }
-  </script>
+        // Start the bouncing animation
+        updatePosition();
+
+        // Create a new image when the user clicks on any image
+        document.body.addEventListener('click', (e) => {
+            // Only create new image if the click is on the existing bouncing images
+            if (e.target && e.target.classList.contains('bouncingImg')) {
+                createBouncingImage(e.clientX, e.clientY);
+            }
+        });
+
+        // Create the first image at the center of the screen
+        createBouncingImage(window.innerWidth / 2, window.innerHeight / 2);
+    </script>
 </body>
 </html>
