@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 Page</title>
+    <title>Bouncing Images</title>
     <style>
         * {
             margin: 0;
@@ -17,10 +17,11 @@
             position: relative;
             font-family: Arial, sans-serif;
         }
-        #bouncingImg {
+        .bouncingImg {
             position: absolute;
             width: 100px;
             height: 100px;
+            cursor: pointer;
         }
         #errorText {
             position: absolute;
@@ -36,53 +37,93 @@
 </head>
 <body>
     <div id="errorText">404</div>
-    <img id="bouncingImg" src="Pic.png" alt="Bouncing Image">
 
     <script>
-        const img = document.getElementById('bouncingImg');
         const errorText = document.getElementById('errorText');
-        let posX = 0;
-        let posY = 0;
-        let speedX = 2;
-        let speedY = 2;
-        let imgWidth = img.width;
-        let imgHeight = img.height;
+        const images = []; // Array to keep track of all bouncing images
 
+        // Function to create and add a new bouncing image
+        function createBouncingImage(x, y) {
+            const img = document.createElement('img');
+            img.src = "Pic.png";  // Image source
+            img.classList.add('bouncingImg');
+            img.style.left = `${x}px`;
+            img.style.top = `${y}px`;
+
+            // Append the image to the body
+            document.body.appendChild(img);
+
+            // Initialize the image's position and speed
+            const imageData = {
+                element: img,
+                posX: x,
+                posY: y,
+                speedX: (Math.random() * 4) + 2, // Random speed
+                speedY: (Math.random() * 4) + 2, // Random speed
+                width: img.width,
+                height: img.height
+            };
+
+            images.push(imageData); // Add the image to the array
+        }
+
+        // Function to handle the movement and collision detection
         function updatePosition() {
             // Get window dimensions
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
 
-            // Update image position
-            posX += speedX;
-            posY += speedY;
+            // Loop through each image to update its position
+            images.forEach(imageData => {
+                // Update position
+                imageData.posX += imageData.speedX;
+                imageData.posY += imageData.speedY;
 
-            // Bounce image off the walls
-            if (posX + imgWidth > windowWidth || posX < 0) {
-                speedX = -speedX; // reverse horizontal direction
-            }
-            if (posY + imgHeight > windowHeight || posY < 0) {
-                speedY = -speedY; // reverse vertical direction
-            }
+                // Bounce off the walls
+                if (imageData.posX + imageData.width > windowWidth || imageData.posX < 0) {
+                    imageData.speedX = -imageData.speedX; // Reverse horizontal direction
+                }
+                if (imageData.posY + imageData.height > windowHeight || imageData.posY < 0) {
+                    imageData.speedY = -imageData.speedY; // Reverse vertical direction
+                }
 
-            // Set the new position of the image
-            img.style.left = posX + 'px';
-            img.style.top = posY + 'px';
+                // Check for collision with other images
+                images.forEach(otherImageData => {
+                    if (imageData !== otherImageData) {
+                        const dx = imageData.posX - otherImageData.posX;
+                        const dy = imageData.posY - otherImageData.posY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        // If images collide, reverse their speeds
+                        if (distance < (imageData.width / 2 + otherImageData.width / 2)) {
+                            imageData.speedX = -imageData.speedX;
+                            imageData.speedY = -imageData.speedY;
+                            otherImageData.speedX = -otherImageData.speedX;
+                            otherImageData.speedY = -otherImageData.speedY;
+                        }
+                    }
+                });
+
+                // Set the new position for the image element
+                imageData.element.style.left = `${imageData.posX}px`;
+                imageData.element.style.top = `${imageData.posY}px`;
+            });
 
             // Request the next frame
             requestAnimationFrame(updatePosition);
         }
 
-        // Start bouncing once the image is loaded
-        img.onload = function () {
-            updatePosition();
-        }
+        // Start the bouncing animation
+        updatePosition();
 
-        // Update image size if the window is resized
-        window.onresize = function () {
-            imgWidth = img.width;
-            imgHeight = img.height;
-        };
+        // Create a new image when the user clicks anywhere on the page
+        document.body.addEventListener('click', (e) => {
+            // Create new image at the mouse click position
+            createBouncingImage(e.clientX, e.clientY);
+        });
+
+        // Create the first image at the center of the screen
+        createBouncingImage(window.innerWidth / 2, window.innerHeight / 2);
     </script>
 </body>
 </html>
