@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bouncing Images with Canvas 404 Effect</title>
+    <title>I have not made this page yet...</title>
     <style>
         * {
             margin: 0;
@@ -60,7 +60,7 @@
             ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
 
             // Draw the 404 text in the center of the canvas
-            ctx.fillText('404', canvas.width / 2, canvas.height / 2);
+            ctx.fillText('I have not made this (yet)', canvas.width / 2, canvas.height / 2);
         }
 
         // Call the draw function
@@ -100,17 +100,47 @@
             images.push(imageData); // Add the image to the array
         }
 
+        // Function to check for collisions between images
+        function checkCollisions(imageData) {
+            images.forEach(otherImageData => {
+                if (otherImageData !== imageData) {
+                    // Check if the images are colliding
+                    const dx = imageData.posX - otherImageData.posX;
+                    const dy = imageData.posY - otherImageData.posY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    // If the distance is less than the sum of the radii, reverse the direction
+                    if (distance < (imageData.width / 2 + otherImageData.width / 2)) {
+                        const angle = Math.atan2(dy, dx);
+                        const speedX1 = Math.cos(angle) * 4;
+                        const speedY1 = Math.sin(angle) * 4;
+                        const speedX2 = Math.cos(angle + Math.PI) * 4;
+                        const speedY2 = Math.sin(angle + Math.PI) * 4;
+
+                        // Reverse directions upon collision
+                        imageData.speedX = speedX1;
+                        imageData.speedY = speedY1;
+                        otherImageData.speedX = speedX2;
+                        otherImageData.speedY = speedY2;
+                    }
+                }
+            });
+        }
+
         // Function to handle the movement and collision detection
         function updatePosition() {
             // Get window dimensions
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
 
-            // Loop through each image to update its position
+            // Loop through each image to update its position and check for collisions
             images.forEach(imageData => {
                 // Update position for normal bouncing
                 imageData.posX += imageData.speedX;
                 imageData.posY += imageData.speedY;
+
+                // Check for collisions with other images
+                checkCollisions(imageData);
 
                 // Bounce off the walls
                 if (imageData.posX + imageData.width > windowWidth || imageData.posX < 0) {
