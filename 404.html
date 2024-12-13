@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bouncing Images</title>
+    <title>Bouncing Images with Canvas 404 Effect</title>
     <style>
         * {
             margin: 0;
@@ -23,23 +23,56 @@
             height: 100px;
             cursor: pointer;
         }
-        #errorText {
+        canvas {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 200px;
-            color: rgba(0, 0, 0, 0.1);
             z-index: 1;
-            user-select: none;
         }
     </style>
 </head>
 <body>
-    <div id="errorText">404</div>
+    <canvas id="canvas"></canvas>
 
     <script>
-        const errorText = document.getElementById('errorText');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Resize the canvas to fill the window
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Function to draw the 404 text with a pop-out effect
+        function draw404() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas before redrawing
+
+            // Set up the text properties
+            ctx.font = '200px Arial';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; // Light grey background
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Add shadow effect for pop-out
+            ctx.shadowOffsetX = 10;
+            ctx.shadowOffsetY = 10;
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+
+            // Draw the 404 text in the center of the canvas
+            ctx.fillText('404', canvas.width / 2, canvas.height / 2);
+        }
+
+        // Call the draw function
+        draw404();
+
+        // Resize canvas if the window is resized
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            draw404(); // Redraw after resizing
+        });
+
         const images = []; // Array to keep track of all bouncing images
 
         // Function to create and add a new bouncing image
@@ -75,7 +108,7 @@
 
             // Loop through each image to update its position
             images.forEach(imageData => {
-                // Update position
+                // Update position for normal bouncing
                 imageData.posX += imageData.speedX;
                 imageData.posY += imageData.speedY;
 
@@ -86,23 +119,6 @@
                 if (imageData.posY + imageData.height > windowHeight || imageData.posY < 0) {
                     imageData.speedY = -imageData.speedY; // Reverse vertical direction
                 }
-
-                // Check for collision with other images
-                images.forEach(otherImageData => {
-                    if (imageData !== otherImageData) {
-                        const dx = imageData.posX - otherImageData.posX;
-                        const dy = imageData.posY - otherImageData.posY;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        // If images collide, reverse their speeds
-                        if (distance < (imageData.width / 2 + otherImageData.width / 2)) {
-                            imageData.speedX = -imageData.speedX;
-                            imageData.speedY = -imageData.speedY;
-                            otherImageData.speedX = -otherImageData.speedX;
-                            otherImageData.speedY = -otherImageData.speedY;
-                        }
-                    }
-                });
 
                 // Set the new position for the image element
                 imageData.element.style.left = `${imageData.posX}px`;
@@ -116,16 +132,14 @@
         // Start the bouncing animation
         updatePosition();
 
-        // Create a new image when the user clicks on any image
-        document.body.addEventListener('click', (e) => {
-            // Only create new image if the click is on the existing bouncing images
-            if (e.target && e.target.classList.contains('bouncingImg')) {
-                createBouncingImage(e.clientX, e.clientY);
-            }
-        });
-
         // Create the first image at the center of the screen
         createBouncingImage(window.innerWidth / 2, window.innerHeight / 2);
+
+        // Create new images when the user clicks anywhere on the page
+        document.body.addEventListener('click', (e) => {
+            // Create new image at the mouse click position
+            createBouncingImage(e.clientX, e.clientY);
+        });
     </script>
 </body>
 </html>
